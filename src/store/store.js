@@ -7,11 +7,7 @@ export default new Vuex.Store({
   state: {
     headers: [
       // 标题
-      {
-        text: "日期",
-        align: "start",
-        value: "date",
-      },
+      {text: "日期", value: "date"},
       {text: "订单编号", value: "OrderNumber"},
       {text: "抖音昵称", value: "nickname"},
       {text: "收件人", value: "Receiver"},
@@ -54,6 +50,54 @@ export default new Vuex.Store({
       statusValue: "未",
       product: "(在商品库)",
     },
+
+    sampleInfo: [
+      {
+        date: "2011-01-01",
+        OrderNumber: "1111",
+        nickname: "abc111",
+        Receiver: "金**",
+        TrackingNumber: "775500****",
+        status: "instock",
+        product: "sn111**",
+      },
+      {
+        date: "2012-02-02",
+        OrderNumber: "2222",
+        nickname: "abc2",
+        Receiver: "xuan**",
+        TrackingNumber: "ytg5511****",
+        status: "isgoing",
+        product: "NN22**",
+      },
+      {
+        date: "2012-03-03",
+        OrderNumber: "333",
+        nickname: "abc3",
+        Receiver: "lee**",
+        TrackingNumber: "ytg5522****",
+        status: "instock",
+        product: "NN22**",
+      },
+      {
+        date: "2012-04-04",
+        OrderNumber: "444",
+        nickname: "abc4",
+        Receiver: "kim**",
+        TrackingNumber: "ytg5533****",
+        status: "unorderd",
+        product: "NN22**",
+      },
+      {
+        date: "2012-05-05",
+        OrderNumber: "5555",
+        nickname: "abc5",
+        Receiver: "ppp**",
+        TrackingNumber: "ytg5444****",
+        status: "orderd",
+        product: "NN22**",
+      },
+    ],
   },
   // getters: {},
   mutations: {},

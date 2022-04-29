@@ -15,7 +15,7 @@ const routes = [
   },
   {
     // 采购页面
-    path: "/perchase",
+    path: "/perchase:",
     name: "PurchaseView",
     component: PurchaseView,
   },

@@ -2,18 +2,35 @@
   <div>
     <h1>库存管理 页面</h1>
     <v-container class="my-5">
-      <v-layout row align-content wrap>
-        <v-flex xs12 sm6 md4 lg3 v-for="pr in product" :key="pr">
+      <v-layout
+        align-content
+        wrap
+      >
+        <v-flex
+          v-for="(pr, index) in product"
+          :key="index"
+          xs12
+          sm6
+          md4
+          lg3
+        >
           <v-card
             hover
+            flat
             max-width="350"
             max-height="600"
             exact
-            class="text-xs-center ma-4 pa-1"
+            class="text-center ma-4 pa-1"
           >
             <v-responsive class="pa-6">
-              <v-avatar size="150" class="grey lighten-2">
-                <img :src="pr.pr_img" alt="主图" />
+              <v-avatar
+                size="150"
+                class="grey lighten-2"
+              >
+                <img
+                  :src="pr.pr_img"
+                  alt="主图"
+                >
               </v-avatar>
             </v-responsive>
 
@@ -33,9 +50,18 @@
               <div class="subheading">
                 库存总数:
                 <span class="black--text"> {{ pr.pr_instock }} 个</span>
-                <v-avatar height="20" width="20">
-                  <img src="china.png" alt="flag-nation" />
-                  <img src="korea.png" alt="flag-nation" />
+                <v-avatar
+                  height="20"
+                  width="20"
+                >
+                  <img
+                    src="china.png"
+                    alt="flag-nation"
+                  >
+                  <img
+                    src="korea.png"
+                    alt="flag-nation"
+                  >
                 </v-avatar>
               </div>
               <div class="subheading">
@@ -58,8 +84,16 @@
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-btn flat color="white grey--text">
-                <v-icon small left>mdi-plus</v-icon>
+              <v-btn
+                text
+                color="white grey--text"
+              >
+                <v-icon
+                  small
+                  left
+                >
+                  mdi-plus
+                </v-icon>
                 <span>其 他</span>
               </v-btn>
             </v-card-actions>

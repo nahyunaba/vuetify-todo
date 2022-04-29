@@ -1,163 +1,172 @@
+/* eslint-disable vue/no-parsing-error */
 <template>
-  <v-data-table
-    :headers="$store.state.headers"
-    :search="search"
-    sort-by="['Receiver', 'date', 'nickname']"
-    class="datatable"
-    :sort-desc="[false, true]"
-    :items="userInfo"
-    item-class="status"
-    items-per-page="20"
-  >
-    <!-- Search  & titleName -->
-    <template v-slot:top>
-      <v-toolbar flat>
-        <v-toolbar-title>订单管理页面 </v-toolbar-title>
-        <v-divider class="mx-4" inset vertical></v-divider>
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-          autofocus
-        ></v-text-field>
-        <v-spacer></v-spacer>
-
-        <!--新增订单 btn -->
-
-        <v-dialog v-model="dialog" max-width="500px">
+  <div class="dashboard">
+    <template>
+      <!-- DIALOG -->
+      <div class="text-center">
+        <v-dialog v-model="dialog" width="500">
           <template v-slot:activator="{on, attrs}">
-            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+            <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
               新 增 订 单
             </v-btn>
           </template>
 
+          <!-- DIALOG 's插槽 input value-->
           <v-card>
-            <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
+            <v-card-title class="text-h5 grey lighten-2">
+              <span class="text--h5">{{ formTitle }}</span>
             </v-card-title>
-
-            <!-- edit Dialog detail  -->
-
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.date"
-                      label="选择日期"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.OrderNumber"
-                      label="订单编号"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="6">
                     <v-text-field
                       v-model="editedItem.nickname"
-                      label="抖音昵称"
+                      name="nickname"
+                      label="抖音名"
+                      id="id"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="6">
+                    <v-text-field
+                      v-model="editedItem.OrderNumber"
+                      name="OrderNumber"
+                      label="抖音订单号"
+                      id="id"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="4">
+                    <v-text-field
+                      v-model="editedItem.Receiver"
+                      name="Receiver"
+                      label="收件人"
+                      id="id"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="3">
                     <v-text-field
                       v-model="editedItem.TrackingNumber"
+                      name="TrackingNumber"
                       label="快递单号"
+                      id="id"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      :items="items"
-                      v-model="editedItem.status"
-                      classNam
-                      label="状态"
-                    >
-                    </v-select>
-                  </v-col>
-
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.product"
-                      label="产品编码"
-                    ></v-text-field>
+                  <v-col>
+                    <select name="" id="">
+                      <option value="选择">1</option>
+                      <option value="">1</option>
+                      <option value="">1</option>
+                    </select>
                   </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
 
+            <v-divider class="mx-4" inset vertical></v-divider>
+
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
-              <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+              <v-btn color="primary" text @click="save()"> 提 交</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-
-        <!-- delete confirm dialog -->
-
-        <v-dialog v-model="dialogDelete" max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5">确定删除吗?(永久删除)</v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete"
-                >取 消</v-btn
-              >
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                >确 定</v-btn
-              >
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
+      </div>
+      <!-- 삭제 확인 dialog -->
+      <v-dialog v-model="dialogDelete" max-width="500px">
+        <v-card>
+          <v-card-title class="text-h5"
+            >Are you sure you want to delete this item?</v-card-title
+          >
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="closeDelete"
+              >Cancel</v-btn
+            >
+            <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+              >OK</v-btn
+            >
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </template>
+    <v-divider inset></v-divider>
 
-    <template slot="items" slot-scope="props">
-      <td class="test">{{ props.item.name }}</td>
-      <td class="test1">{{ props.item.calories }}</td>
-      <td class="test2">{{ props.item.fat }}</td>
-      <td class="test3">{{ props.item.carbs }}</td>
-      <td class="test4">{{ props.item.protein }}</td>
-      <td class="test5">{{ props.item.iron }}</td>
-    </template>
+    <!-- list 表 -->
+    <v-main>
+      <v-container class="my-5">
+        <v-card
+          v-for="(item, index) in dessert"
+          :key="index"
+          outlined
+          class="my-2"
+          hover
+        >
+          <v-layout wrap>
+            <v-flex xs12 md1 :class="`pa-1 ma-2  status ${item.status}`">
+              <div class="text-caption grey--text">日期</div>
+              <div>{{ item.date }}</div>
+            </v-flex>
+            <v-flex xs6 sm4 md1>
+              <div class="text-caption grey--text">订单编号</div>
+              <div>{{ item.OrderNumber }}</div>
+            </v-flex>
+            <v-flex xs6 sm4 md1>
+              <div class="text-caption grey--text">昵称</div>
+              <div>{{ item.nickname }}</div>
+            </v-flex>
+            <v-flex xs6 sm4 md1>
+              <div class="text-caption grey--text">收货人</div>
+              <div>{{ item.Receiver }}</div>
+            </v-flex>
 
-    <!-- edit / delete  btn -->
+            <v-flex xs6 sm4 md1>
+              <div class="text-caption grey--text">快递单号</div>
+              <div>{{ item.TrackingNumber }}</div>
+            </v-flex>
+            <v-flex xs6 sm4 md2>
+              <div>
+                <v-chip
+                  :color="item.status"
+                  :class="`v-chip-active white--text caption my-2`"
+                >
+                  {{ item.status }}
+                </v-chip>
+              </div>
+            </v-flex>
 
-    <template v-slot:[`item.actions`]="{item}">
-      <v-btn x-small dark class="mr-2" @click="editItem(item)">
-        <v-icon small> mdi-pencil </v-icon>
-        <span>编辑</span>
-      </v-btn>
+            <!-- deit / delet  -->
+            <v-flex xs6 sm4>
+              <template v-solt:[getItemCtrol()]="{item}">
+                <v-icon color="primary" class="pa-3" @click="editItem(item)">
+                  mdi-pencil
+                </v-icon>
 
-      <v-btn x-small color="red" @click="deleteItem(item)">
-        <v-icon small> mdi-delete </v-icon>
-        <span>删除</span>
-      </v-btn>
-    </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize"> Reset </v-btn>
-    </template>
-  </v-data-table>
+                <v-icon color="error" class="pa-3" @click="deleteItem(item)">
+                  mdi-delete
+                </v-icon>
+              </template>
+            </v-flex>
+          </v-layout>
+        </v-card>
+      </v-container>
+    </v-main>
+  </div>
 </template>
-<script>
-// import {mapMutations} from "vuex";
 
+<script>
 export default {
   data: () => ({
-    // select Status
-    items: ["unorderd", "orderd", "isgoing", "instock"],
-    //
-    search: "",
-    dialog: false,
+    dialog: true,
     dialogDelete: false,
 
-    userInfo: [],
     editedIndex: -1,
+
+    //editedItem 는 new 입력 값
     editedItem: {
-      date: "edititem",
+      date: "",
       OrderNumber: "",
       nickname: "",
       Receiver: "",
@@ -166,47 +175,9 @@ export default {
       product: "",
     },
 
-    sample: [
-      {
-        date: "2022-01-01",
-        OrderNumber: "1111jinxiong1111",
-        nickname: "xiong",
-        Receiver: "吉林省延吉市长白山综合楼3单元701",
-        TrackingNumber: "775510102222",
-        status: "isgoing", //  unorderd,orderd,isgoing,instock
-        product: "img",
-      },
-      {
-        date: "2022-02-02",
-        OrderNumber: "222222xuanhua2222",
-        nickname: "xuanhua",
-        Receiver: "222吉林省延吉市长白山综合楼3单元222222",
-        TrackingNumber: "ytg22222222",
-        status: "instock",
-        product: "img2",
-      },
-      {
-        date: "2022-03-03",
-        OrderNumber: "333naxian ",
-        nickname: "jinnaxian",
-        Receiver: "333吉林省延吉市长白山综合楼3单元222222",
-        TrackingNumber: "333333单号",
-        status: "unorderd",
-        product: "img3",
-      },
-      {
-        date: "2022-03-03",
-        OrderNumber: "4444 ",
-        nickname: "4444",
-        Receiver: "4443吉林省延吉市长白山综合楼3单元222222",
-        TrackingNumber: "44433单号",
-        status: "unorderd",
-        product: "img4",
-      },
-    ],
-
+    // defaultItem 은 입력값을 닫을때 초기화 할것임
     defaultItem: {
-      date: "dfault",
+      date: "",
       OrderNumber: "",
       nickname: "",
       Receiver: "",
@@ -214,49 +185,52 @@ export default {
       status: "",
       product: "",
     },
+    // dessert 최종 데이터.(샘플 과 모든 데이터 넣을 장소)
+    dessert: [],
   }),
 
-  computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
-  },
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
-  },
-
   created() {
-    this.initialize();
+    this.initialize(); //초기화 실행
   },
 
   methods: {
-    initialize() {
-      this.userInfo = this.sample;
+    //v-slot.action 의 eslint 에러 제거
+    getItemCtrol() {
+      return `item.actions`;
     },
 
+    // dessert 에 smaple 데이터 스토어에서 가져옴
+    initialize() {
+      this.dessert = this.$store.state.sampleInfo;
+    },
+
+    // 새로운 데이타 를 최종 데이타에 푸시
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.dessert[this.editedIndex], this.editedItem);
+      } else {
+        this.dessert.push(this.editedItem);
+        // console.log(this.editedItem);
+      }
+      this.close();
+    },
+    // 편집(해당dessert의 내용)
     editItem(item) {
-      this.editedIndex = this.userInfo.indexOf(item);
+      this.editedIndex = this.dessert.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
-
+    // 삭제 (해당 dessert의 내용)
     deleteItem(item) {
-      this.editedIndex = this.userInfo.indexOf(item);
+      let abc = this.dessert.indexOf(item);
+      this.editedIndex = abc;
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
-
     deleteItemConfirm() {
-      this.userInfo.splice(this.editedIndex, 1);
+      this.dessert.splice(this.editedIndex, 1);
       this.closeDelete();
     },
-
     close() {
       this.dialog = false;
       this.$nextTick(() => {
@@ -272,28 +246,47 @@ export default {
         this.editedIndex = -1;
       });
     },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.userInfo[this.editedIndex], this.editedItem);
-      } else {
-        this.userInfo.push(this.editedItem);
-      }
-      this.close();
+  },
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+    dialogDelete(val) {
+      val || this.closeDelete();
+    },
+  },
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
   },
 };
 </script>
-<style scope>
-.instock {
-  background-color: rgba(255, 0, 0, 0.453);
+
+<style scoped>
+.status.unorderd {
+  border-left: 3px solid rgba(96, 95, 93, 0.561);
 }
-.isgoing {
-  background-color: rgba(46, 255, 14, 0.309);
+.status.orderd {
+  border-left: 3px solid rgba(255, 217, 0, 0.478);
 }
-.orderd {
-  background-color: rgba(0, 128, 0, 0.485);
+.status.isgoing {
+  border-left: 3px solid rgba(0, 255, 72, 0.436);
 }
-.unorderd {
-  background-color: rgba(255, 255, 0, 0.474);
+.status.instock {
+  border-left: 3px solid rgba(255, 0, 0, 0.523);
+}
+
+.v-chip.unorderd {
+  background-color: rgba(96, 95, 93, 0.561) !important;
+}
+.v-chip.orderd {
+  background-color: rgba(255, 217, 0, 0.478) !important;
+}
+.v-chip.isgoing {
+  background-color: rgba(0, 255, 72, 0.436) !important;
+}
+.v-chip.instock {
+  background-color: rgba(255, 0, 0, 0.523) !important;
 }
 </style>
