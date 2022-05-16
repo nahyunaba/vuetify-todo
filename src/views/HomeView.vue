@@ -3,10 +3,17 @@
   <div class="dashboard">
     <template>
       <!-- DIALOG -->
+
       <div class="text-center">
-        <v-dialog v-model="dialog" width="500">
+        <v-dialog v-model="dialog" width="700">
           <template v-slot:activator="{on, attrs}">
-            <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
+            <v-btn
+              large
+              class="ma-3"
+              color="red  lighten-2 white--text"
+              v-bind="attrs"
+              v-on="on"
+            >
               新 增 订 单
             </v-btn>
           </template>
@@ -37,7 +44,7 @@
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col cols="4">
+                  <v-col cols="6">
                     <v-text-field
                       v-model="editedItem.Receiver"
                       name="Receiver"
@@ -45,7 +52,7 @@
                       id="id"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="3">
+                  <v-col cols="6">
                     <v-text-field
                       v-model="editedItem.TrackingNumber"
                       name="TrackingNumber"
@@ -53,12 +60,13 @@
                       id="id"
                     ></v-text-field>
                   </v-col>
-                  <v-col>
-                    <select name="" id="">
-                      <option value="选择">1</option>
-                      <option value="">1</option>
-                      <option value="">1</option>
-                    </select>
+                  <v-col cols="4">
+                    <v-select
+                      :items="select_items"
+                      v-model="editedItem.status"
+                      filled
+                      label="状态选择"
+                    ></v-select>
                   </v-col>
                 </v-row>
               </v-container>
@@ -76,16 +84,12 @@
       <!-- 삭제 확인 dialog -->
       <v-dialog v-model="dialogDelete" max-width="500px">
         <v-card>
-          <v-card-title class="text-h5"
-            >Are you sure you want to delete this item?</v-card-title
-          >
+          <v-card-title class="text-h5">是否确定删除此项?</v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="closeDelete"
-              >Cancel</v-btn
-            >
+            <v-btn color="blue darken-1" text @click="closeDelete">取消</v-btn>
             <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-              >OK</v-btn
+              >确定</v-btn
             >
             <v-spacer></v-spacer>
           </v-card-actions>
@@ -93,9 +97,18 @@
       </v-dialog>
     </template>
     <v-divider inset></v-divider>
-
+    <div>
+      <v-btn-group class="pa-2">
+        <span>筛选:</span>
+        <v-btn class="ma-2">日期</v-btn>
+        <v-btn class="ma-2">收货人</v-btn>
+        <v-btn>订单号</v-btn>
+      </v-btn-group>
+    </div>
+    <v-divider inset></v-divider>
     <!-- list 表 -->
-    <v-main>
+
+    <v-card v-scroll class="overflow-y-auto" max-height="1000">
       <v-container class="my-5">
         <v-card
           v-for="(item, index) in dessert"
@@ -128,38 +141,45 @@
             </v-flex>
             <v-flex xs6 sm4 md2>
               <div>
+                <div class="text-caption grey--text">状 态</div>
                 <v-chip
                   :color="item.status"
-                  :class="`v-chip-active white--text caption my-2`"
+                  :class="`v-chip-active black--text caption my-2`"
                 >
                   {{ item.status }}
                 </v-chip>
               </div>
             </v-flex>
-
-            <!-- deit / delet  -->
-            <v-flex xs6 sm4>
+            <!-- edit / delet  -->
+            <v-flex xs6 sm4 md2>
               <template v-solt:[getItemCtrol()]="{item}">
-                <v-icon color="primary" class="pa-3" @click="editItem(item)">
+                <v-icon color="blue" class="pa-3" @click="editItem(item)" large>
                   mdi-pencil
                 </v-icon>
 
-                <v-icon color="error" class="pa-3" @click="deleteItem(item)">
+                <v-icon
+                  color="red"
+                  class="pa-3"
+                  @click="deleteItem(item)"
+                  large
+                >
                   mdi-delete
                 </v-icon>
               </template>
             </v-flex>
           </v-layout>
         </v-card>
-      </v-container>
-    </v-main>
+      </v-container></v-card
+    >
   </div>
 </template>
 
 <script>
 export default {
+  components: {},
   data: () => ({
-    dialog: true,
+    select_items: ["instock", "unorderd", "isgoing"],
+    dialog: false,
     dialogDelete: false,
 
     editedIndex: -1,

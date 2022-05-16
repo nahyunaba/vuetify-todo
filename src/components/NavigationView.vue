@@ -1,71 +1,68 @@
 <template>
-  <div>
-    <v-main>
-      <v-toolbar>
-        <v-toolbar-title class="text-uppercase grey--text">
-          <v-app-bar-nav-icon @click="drawer = !drawer" />
-          <span class="font-weight-light">{{ $route.params.name }} </span>
-        </v-toolbar-title>
-        <v-spacer />
-        <v-btn color=" blue--text ">
-          <span>join</span>
-          <v-icon>mdi-account</v-icon>
-        </v-btn>
-        <v-btn color=" grey--text ma-3">
-          <span>Logout</span>
-          <v-icon>mdi-logout</v-icon>
-        </v-btn>
-      </v-toolbar>
+  <nav>
+    <!-- 顶部的 装修 -->
+    <v-toolbar outlined flat>
+      <v-app-bar-nav-icon @click="drawer = !drawer" />
+      <v-toolbar-title class="text-uppercase grey--text"
+        >click
+        <span class="font-weight-light">{{ $route.params.page }}啥啊 </span>
+      </v-toolbar-title>
+      <v-spacer />
+      <v-btn color=" blue--text ">
+        <span>join</span>
+        <v-icon right>mdi-account</v-icon>
+      </v-btn>
+      <v-btn color=" grey--text ma-3">
+        <span>Logout</span>
+        <v-icon right>mdi-logout</v-icon>
+      </v-btn>
+    </v-toolbar>
 
-      <!-- navgation drawer -->
-      <v-navigation-drawer
-        v-model="drawer"
-        app
-        dark
-        :src="require('@/assets/naxian.png')"
-      >
-        <template v-slot:img="aaa">
-          <v-img :gradient="gradient" v-bind="aaa" />
-        </template>
-
-        <v-list-item>
-          <v-list-item-content>
-            <v-avatar size="100">
-              <img
-                src="../assets/naxian.png"
-                alt="alt"
-                height="100"
-                width="100"
-              />
-            </v-avatar>
-          </v-list-item-content>
-        </v-list-item>
-
+    <!-- navgation drawer -->
+    <v-navigation-drawer
+      app
+      v-model="drawer"
+      dark
+      :src="require('@/assets/naxian.png')"
+    >
+      <!-- gradien bind img-->
+      <template v-slot:img="aaa">
+        <v-img :gradient="gradient" v-bind="aaa" />
+      </template>
+      <v-list>
+        <v-list-item-content>
+          <v-avatar size="100">
+            <img
+              src="../assets/naxian.png"
+              alt="alt"
+              height="100"
+              width="100"
+            />
+          </v-avatar>
+        </v-list-item-content>
         <v-divider />
-        <v-list dense nav>
-          <v-list-item
-            v-for="menu in menu"
-            :key="menu.id"
-            :to="menu.to"
-            active-class="primary"
-            class="py-2"
-            :params="menu.params"
-          >
-            <v-list-item-icon>
-              <v-icon>{{ menu.icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>{{ menu.name }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-navigation-drawer>
-    </v-main>
-  </div>
+
+        <v-list-item
+          v-for="menu in menu"
+          :key="menu.id"
+          :to="menu.to"
+          active-class="primary"
+          class="py-2"
+        >
+          <v-list-item-icon>
+            <v-icon>{{ menu.icon }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>{{ menu.name }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+  </nav>
 </template>
 
 <script>
 export default {
   data: () => ({
-    drawer: false,
+    drawer: true,
     gradient: "rgba(0,0,0,.6),rgba(0,0,0,.8)",
     menu: [
       {
@@ -99,14 +96,5 @@ export default {
     ],
     //
   }),
-
-  computed: {
-    pagename() {
-      console.log($this.$route.params);
-    },
-  },
-  methods: {},
 };
 </script>
-
-<style></style>

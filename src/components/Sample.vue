@@ -38,21 +38,6 @@
 
 <script>
 export default {
-  data: () => {
-
-     dessert: {
-       date: "",
-      OrderNumber: "",
-      nickname: "",
-      Receiver: "",
-      TrackingNumber: "",
-      status: "",
-      product: "",
-
-    },
-
-
-
-  },
+  data: () => {},
 };
 </script>
